@@ -38,12 +38,12 @@ class TrustworthyLanguageModel(BaseLLM):
     cleanlab_api_key: Optional[SecretStr] = Field(default=None)
     """Cleanlab API key. Get it here: https://app.cleanlab.ai"""
 
-    quality_preset: Optional[str] = Field(default="medium")
+    quality_preset: str = Field(default="medium")
     """Presets to vary the quality of LLM response. Available presets listed here: 
         https://help.cleanlab.ai/reference/python/trustworthy_language_model/#class-tlmoptions
     """
 
-    options: Optional[Dict[str, Any]] = Field(default=None)
+    options: Dict[str, Any] = Field(default_factory=dict)
     """Holds configurations for trustworthy language model. 
        Available options (model, max_tokens, etc.) with their definitions listed here: 
        https://help.cleanlab.ai/reference/python/trustworthy_language_model/#class-tlmoptions
@@ -110,7 +110,7 @@ class TrustworthyLanguageModel(BaseLLM):
     ) -> LLMResult:
         """Call Cleanlab endpoint and return response with additional info."""
 
-        responses: List[Dict[str, str]] = self._client.prompt(prompts)
+        responses: List[Dict[str, Any]] = self._client.prompt(prompts)
 
         generations = []
         for resp in responses:
@@ -146,7 +146,7 @@ class TrustworthyLanguageModel(BaseLLM):
     ) -> LLMResult:
         """Asynchronously call to Cleanlab endpoint."""
 
-        responses: List[Dict[str, str]] = await self._client.prompt_async(prompts)
+        responses: List[Dict[str, Any]] = await self._client.prompt_async(prompts)
 
         generations = []
         for resp in responses:
