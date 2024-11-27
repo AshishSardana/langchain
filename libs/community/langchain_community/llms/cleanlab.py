@@ -1,4 +1,3 @@
-import logging
 from typing import Any, Dict, List, Mapping, Optional
 
 from langchain_core.callbacks import (
@@ -12,7 +11,9 @@ from pydantic import Field, PrivateAttr, SecretStr, model_validator
 
 from langchain_community.llms.utils import enforce_stop_tokens
 
-logger = logging.getLogger(__name__)
+DEFAULT_MODEL = "gpt-4o-mini"
+DEFAULT_QUALITY_PRESET = "medium"
+DEFAULT_MAX_TOKENS = 512
 
 
 class TrustworthyLanguageModel(BaseLLM):
@@ -38,7 +39,7 @@ class TrustworthyLanguageModel(BaseLLM):
     cleanlab_api_key: Optional[SecretStr] = Field(default=None)
     """Cleanlab API key. Get it here: https://app.cleanlab.ai"""
 
-    quality_preset: str = Field(default="medium")
+    quality_preset: str = Field(default=DEFAULT_QUALITY_PRESET)
     """Presets to vary the quality of LLM response. Available presets listed here: 
         https://help.cleanlab.ai/reference/python/trustworthy_language_model/#class-tlmoptions
     """
@@ -90,9 +91,9 @@ class TrustworthyLanguageModel(BaseLLM):
     def _default_params(self) -> Dict[str, Any]:
         """Get the default parameters for calling Cleanlab API."""
         default_params = {
-            "quality_preset": "medium",
-            "max_tokens": 512,
-            "model": "gpt-4o-mini",
+            "quality_preset": DEFAULT_QUALITY_PRESET,
+            "max_tokens": DEFAULT_MAX_TOKENS,
+            "model": DEFAULT_MODEL,
         }
         return {**default_params}
 
