@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any, Dict, List, Mapping, Optional, Union
 
 from langchain_core.callbacks import (
     AsyncCallbackManagerForLLMRun,
@@ -172,3 +172,46 @@ class TrustworthyLanguageModel(BaseLLM):
             )
 
         return LLMResult(generations=generations)
+
+        def get_trustworthiness_score(
+            self,
+            prompts: Union[str, List[str]],
+            responses: Union[str, List[str]],
+        ) -> Union[float, List[float]]:
+            """
+            Calculate trustworthiness scores for prompt-response pairs.
+
+            Uses TrustworthyLanguageModel to evaluate the reliability of responses
+            by generating a trustworthiness score between 0 and 1. Higher scores
+            indicate more reliable responses.
+
+            Args:
+                prompts: Input prompt(s) to evaluate
+                responses: Response(s) to analyze
+
+            Returns:
+                Union[float, List[float]]: Trustworthiness score(s) between 0 and 1
+                    - float: For single prompt-response pair
+                    - List[float]: For multiple prompt-response pairs
+
+            Examples:
+                >>> prompt = "Explain the process of photosynthesis"
+                >>> response = (
+                ...     "Photosynthesis is how plants convert sunlight into energy. "
+                ...     "They use chlorophyll to capture sunlight and combine it with "
+                ...     "CO2 and water to produce glucose and oxygen."
+                ... )
+                >>> get_trustworthiness_score(prompt, response)
+                0.92
+            """
+
+            # Convert to list
+            prompt_list = [prompts] if isinstance(prompts, str) else prompts
+            response_list = [responses] if isinstance(responses, str) else responses
+
+            tlm_response = self._client.try_get_trustworthiness_score(
+                prompt_list, response_list
+            )
+            scores = [resp["trustworthiness_score"] for resp in tlm_response]
+
+            return scores[0] if isinstance(prompts, str) else scores
