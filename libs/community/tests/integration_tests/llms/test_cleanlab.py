@@ -38,3 +38,13 @@ def test_cleanlab_generate() -> None:
     generation_info = output.generations[0][0].generation_info
     assert generation_info is not None
     assert isinstance(generation_info.get("trustworthiness_score"), float)
+
+def test_cleanlab_get_trustworthiness_score() -> None:
+    """Test valid call to trustworthiness endpoint from TLM."""
+    tlm = TrustworthyLanguageModel()
+    prompt = "Explain photosynthesis in few words"
+    response = "Photosynthesis is how plants convert sunlight into energy"
+    output = tlm.get_trustworthiness_score(prompt, response)
+
+    assert tlm._llm_type == "trustworthy_language_model"
+    assert isinstance(output, float)
