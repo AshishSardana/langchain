@@ -6,12 +6,12 @@ Set the ``CLEANLAB_API_KEY`` environment variable with the above API key."""
 
 from langchain_core.outputs import LLMResult
 
-from langchain_community.llms.cleanlab import TrustworthyLanguageModel
+from langchain_community.llms.cleanlab import CleanlabLLM
 
 
 def test_cleanlab_call() -> None:
     """Test valid call to TLM."""
-    tlm = TrustworthyLanguageModel(quality_preset="best")  # type: ignore[call-arg]
+    tlm = CleanlabLLM(quality_preset="best")  # type: ignore[call-arg]
     output = tlm.invoke("Say foo:")
     assert tlm._llm_type == "trustworthy_language_model"
     assert isinstance(output, str)
@@ -19,7 +19,7 @@ def test_cleanlab_call() -> None:
 
 async def test_cleanlab_acall() -> None:
     """Test aysync call to TLM."""
-    tlm = TrustworthyLanguageModel()
+    tlm = CleanlabLLM()
     output = await tlm.ainvoke("Say foo:")
 
     assert tlm._llm_type == "trustworthy_language_model"
@@ -28,7 +28,7 @@ async def test_cleanlab_acall() -> None:
 
 def test_cleanlab_generate() -> None:
     """Test valid generation call to TLM."""
-    tlm = TrustworthyLanguageModel()
+    tlm = CleanlabLLM()
     output = tlm.generate(["Say foo:"])
 
     assert tlm._llm_type == "trustworthy_language_model"
@@ -39,9 +39,10 @@ def test_cleanlab_generate() -> None:
     assert generation_info is not None
     assert isinstance(generation_info.get("trustworthiness_score"), float)
 
+
 def test_cleanlab_get_trustworthiness_score() -> None:
     """Test valid call to trustworthiness endpoint from TLM."""
-    tlm = TrustworthyLanguageModel()
+    tlm = CleanlabLLM()
     prompt = "Explain photosynthesis in few words"
     response = "Photosynthesis is how plants convert sunlight into energy"
     output = tlm.get_trustworthiness_score(prompt, response)

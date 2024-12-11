@@ -16,7 +16,7 @@ DEFAULT_QUALITY_PRESET = "medium"
 DEFAULT_MAX_TOKENS = 512
 
 
-class TrustworthyLanguageModel(BaseLLM):
+class CleanlabLLM(BaseLLM):
     """Cleanlab's Trustworthy Language Model (TLM).
 
     To use, you should have the ``cleanlab-studio`` python package installed,
@@ -27,8 +27,8 @@ class TrustworthyLanguageModel(BaseLLM):
     Example:
         .. code-block:: python
 
-            from langchain_community.llms import TrustworthyLanguageModel
-            tlm = TrustworthyLanguageModel(
+            from langchain_community.llms import CleanlabLLM
+            tlm = CleanlabLLM(
                 cleanlab_api_key="my_api_key",  # Optional if `CLEANLAB_API_KEY` is set
                 quality_preset="best"
             )
@@ -100,7 +100,7 @@ class TrustworthyLanguageModel(BaseLLM):
     @property
     def _llm_type(self) -> str:
         """Return type of llm."""
-        return "trustworthy_language_model"
+        return "cleanlab"
 
     def _generate(
         self,

@@ -592,10 +592,10 @@ def _import_tongyi() -> Type[BaseLLM]:
     return Tongyi
 
 
-def _import_trustworthy_language_model() -> Type[BaseLLM]:
-    from langchain_community.llms.cleanlab import TrustworthyLanguageModel
+def _import_cleanlab() -> Type[BaseLLM]:
+    from langchain_community.llms.cleanlab import CleanlabLLM
 
-    return TrustworthyLanguageModel
+    return CleanlabLLM
 
 
 def _import_vertex() -> Type[BaseLLM]:
@@ -725,6 +725,8 @@ def __getattr__(name: str) -> Any:
         return _import_chatglm()
     elif name == "Clarifai":
         return _import_clarifai()
+    elif name == "Cleanlab":
+        return _import_cleanlab()
     elif name == "Cohere":
         return _import_cohere()
     elif name == "CTransformers":
@@ -863,8 +865,6 @@ def __getattr__(name: str) -> Any:
         return _import_together()
     elif name == "Tongyi":
         return _import_tongyi()
-    elif name == "TrustworthyLanguageModel":
-        return _import_trustworthy_language_model()
     elif name == "VertexAI":
         return _import_vertex()
     elif name == "VertexAIModelGarden":
@@ -924,6 +924,7 @@ __all__ = [
     "CerebriumAI",
     "ChatGLM",
     "Clarifai",
+    "Cleanlab",
     "Cohere",
     "Databricks",
     "DeepInfra",
@@ -993,7 +994,6 @@ __all__ = [
     "TitanTakeoffPro",
     "Together",
     "Tongyi",
-    "TrustworthyLanguageModel",
     "VLLM",
     "VLLMOpenAI",
     "VertexAI",
@@ -1029,6 +1029,7 @@ def get_type_to_cls_dict() -> Dict[str, Callable[[], Type[BaseLLM]]]:
         "cerebriumai": _import_cerebriumai,
         "chat_glm": _import_chatglm,
         "clarifai": _import_clarifai,
+        "cleanlab": _import_cleanlab, 
         "cohere": _import_cohere,
         "ctransformers": _import_ctransformers,
         "ctranslate2": _import_ctranslate2,
@@ -1090,7 +1091,6 @@ def get_type_to_cls_dict() -> Dict[str, Callable[[], Type[BaseLLM]]]:
         "tongyi": _import_tongyi,
         "titan_takeoff": _import_titan_takeoff,
         "titan_takeoff_pro": _import_titan_takeoff_pro,
-        "trustworthy_language_model": _import_trustworthy_language_model,
         "vertexai": _import_vertex,
         "vertexai_model_garden": _import_vertex_model_garden,
         "openllm": _import_openllm,
